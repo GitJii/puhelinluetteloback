@@ -13,7 +13,7 @@ let phonenumbers = [
         id: 2
     },
     {
-        name:'Anselmi Ansalainen',
+        name: 'Anselmi Ansalainen',
         number: '040-3204987324987',
         id: 3
     },
@@ -31,12 +31,17 @@ app.get('/', (request, response) => {
 app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     const person = phonenumbers.find(person => person.id === id)
-    response.json(person)
+
+    if (person) {
+        response.json(person)
+    } else {
+        response.status(404).end()
+    }
 })
 
-app.get('/info', (request,response) => {
-    response.send('<div>puhelinluettelossa on ' + phonenumbers.length + ' henkilön tiedot</div>' 
-    + '<div> <br> </div>' + new Date())
+app.get('/info', (request, response) => {
+    response.send('<div>puhelinluettelossa on ' + phonenumbers.length + ' henkilön tiedot</div>'
+        + '<div> <br> </div>' + new Date())
 })
 
 app.get('/api/persons', (request, response) => {
