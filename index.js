@@ -1,8 +1,19 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const morgan = require('morgan')
+
+
+
+
+morgan.token('data', (request, response) => {    
+    return JSON.stringify(request.body)
+})
 
 app.use(bodyParser.json())
+app.use(morgan(':method :url :data :status :res[content-length] - :response-time ms'))
+/*app.use(morgan('tiny'))*/
+
 
 let phonenumbers = [
     {
@@ -51,14 +62,14 @@ app.get('/api/persons', (request, response) => {
     response.json(phonenumbers)
 })
 
-app.post('/api/persons', (request,response) => {
-    
+app.post('/api/persons', (request, response) => {
+
     const body = request.body
-    
+
     if (body.name === undefined || body.number === undefined) {
-        return response.status(400).json({error:'name or number missing'})
+        return response.status(400).json({ error: 'name or number missing' })
     } else if (phonenumbers.find(person => person.name === body.name)) {
-        return response.status(400).json({error:'name must be unique'})
+        return response.status(400).json({ error: 'name must be unique' })
     }
 
     const person = {
@@ -66,11 +77,9 @@ app.post('/api/persons', (request,response) => {
         number: body.number,
         date: new Date(),
         id: Math.floor(10000 * Math.random())
-
     }
 
     phonenumbers = phonenumbers.concat(person)
-    console.log(person)
 
     response.json(person)
 })
