@@ -54,7 +54,7 @@ app.get('/api/persons/:id', (request, response) => {
     }
 })
 
-app.get('api/info', (request, response) => {
+app.get('/api/info', (request, response) => {
     response.send('<div>puhelinluettelossa on ' + persons.length + ' henkilön tiedot</div>'
         + '<div> <br> </div>' + new Date())
 })
