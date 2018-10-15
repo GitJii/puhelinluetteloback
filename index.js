@@ -4,9 +4,6 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
 
-
-
-
 morgan.token('data', (request, response) => {    
     return JSON.stringify(request.body)
 })
@@ -17,7 +14,9 @@ app.use(morgan(':method :url :data :status :res[content-length] - :response-time
 
 app.use(cors())
 
-let phonenumbers = [
+app.use(express.static('build'))
+
+let persons = [
     {
         name: 'Tero Pitkämäki',
         number: '040-2349873249',
@@ -40,13 +39,13 @@ let phonenumbers = [
     }
 ]
 
-app.get('/', (request, response) => {
+app.get('/api', (request, response) => {
     response.send('<h1> Tämä on etusivu! </h1>')
 })
 
 app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
-    const person = phonenumbers.find(person => person.id === id)
+    const person = persons.find(person => person.id === id)
 
     if (person) {
         response.json(person)
@@ -55,13 +54,13 @@ app.get('/api/persons/:id', (request, response) => {
     }
 })
 
-app.get('/info', (request, response) => {
-    response.send('<div>puhelinluettelossa on ' + phonenumbers.length + ' henkilön tiedot</div>'
+app.get('api/info', (request, response) => {
+    response.send('<div>puhelinluettelossa on ' + persons.length + ' henkilön tiedot</div>'
         + '<div> <br> </div>' + new Date())
 })
 
 app.get('/api/persons', (request, response) => {
-    response.json(phonenumbers)
+    response.json(persons)
 })
 
 app.post('/api/persons', (request, response) => {
@@ -70,7 +69,7 @@ app.post('/api/persons', (request, response) => {
 
     if (body.name === undefined || body.number === undefined) {
         return response.status(400).json({ error: 'name or number missing' })
-    } else if (phonenumbers.find(person => person.name === body.name)) {
+    } else if (persons.find(person => person.name === body.name)) {
         return response.status(400).json({ error: 'name must be unique' })
     }
 
@@ -81,14 +80,14 @@ app.post('/api/persons', (request, response) => {
         id: Math.floor(10000 * Math.random())
     }
 
-    phonenumbers = phonenumbers.concat(person)
+    persons = persons.concat(person)
 
     response.json(person)
 })
 
 app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
-    phonenumbers = phonenumbers.filter(person => person.id !== id)
+    persons = persons.filter(person => person.id !== id)
 
     response.status(204).end()
 })

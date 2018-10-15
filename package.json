@@ -8,9 +8,6 @@
     "watch": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "´"
-  ],
   "author": "Jaakko Kokkonen",
   "license": "MIT",
   "dependencies": {
