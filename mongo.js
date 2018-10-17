@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+/* Tähän tulee url*/
 
 mongoose.connect(url)
 
@@ -10,25 +11,27 @@ const Person = mongoose.model('Person', {
 })
 
 const person = new Person({
-    name: 'Jasso Morese',
-    number: '040-1239898123123'
+    name: process.argv[2],
+    number: process.argv[3]
 
 })
 
-/*
-person
-    .save()
-    .then(response => {
-        console.log('person saved!')
-        mongoose.connection.close()
-    })
-  */  
-
-Person
-    .find({})
-    .then(result=>{
-        result.forEach(person =>{
-            console.log(person)
+if (process.argv[2] !== undefined && process.argv[3] !== undefined) {
+    console.log('lisätään henkilö ' + process.argv[2] +
+        ' numero ' + process.argv[3] + ' luetteloon')
+        person.save()
+        .then(response => {
+            mongoose.connection.close()
         })
-        mongoose.connection.close()
-    })
+} else {
+    Person
+        .find({})
+        .then(result => {
+            console.log('puhelinluettelo: ')
+            result.forEach(person => {
+                console.log(person.name + ' ' + person.number)
+            })
+            mongoose.connection.close()
+        })
+}
+
