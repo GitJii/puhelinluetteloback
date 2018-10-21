@@ -91,12 +91,16 @@ app.get('/api/persons', (request, response) => {
 app.post('/api/persons', (request, response) => {
 
     const body = request.body
-    /*    
-        if (!body.name || !body.number) {
-            return response.status(400).json({ error: 'name or number missing' })
-        } else if (persons.find(person => person.name === body.name)) {
-            return response.status(400).json({ error: 'name must be unique' })
-        }
+
+    if (!body.name || !body.number) {
+        return response.status(400).json({ error: 'name or number missing' })
+    }
+
+
+    /*
+    else if (persons.find(person => person.name === body.name)) {
+        return response.status(400).json({ error: 'name must be unique' })
+    }
     */
 
     const person = new Person({
@@ -105,17 +109,28 @@ app.post('/api/persons', (request, response) => {
         date: new Date(),
     })
 
+    person
+        .save()
+        .then(savedPerson => {
+            response.json(formatPerson(savedPerson))
+        })
+
+    /*
     if (!body.name || !body.number) {
         response.status(400).json({ error: 'name or number missing' })
     } else {
         person
             .save()
-            .then(()=> response.sendStatus(200))
+            .then(savedPerson => {
+                response.json(formatPerson(savedPerson))
+            })
             .catch(error => {
                 console.log('sait napattua virheen' + error)
             })
 
-    }
+    } 
+    */
+
 })
 
 app.delete('/api/persons/:id', (request, response) => {
