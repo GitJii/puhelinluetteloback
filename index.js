@@ -16,7 +16,7 @@ app.use(morgan(':method :url :data :status :res[content-length] - :response-time
 app.use(cors())
 
 app.use(express.static('build'))
-
+/*
 let persons = [
     {
         name: 'Tero Pitkämäki',
@@ -39,7 +39,7 @@ let persons = [
         id: 4
     }
 ]
-
+*/
 
 const formatPerson = (person) => {
     return {
@@ -92,17 +92,6 @@ app.post('/api/persons', (request, response) => {
 
     const body = request.body
 
-    if (!body.name || !body.number) {
-        return response.status(400).json({ error: 'name or number missing' })
-    }
-
-
-    /*
-    else if (persons.find(person => person.name === body.name)) {
-        return response.status(400).json({ error: 'name must be unique' })
-    }
-    */
-
     const person = new Person({
         name: body.name,
         number: body.number,
@@ -114,23 +103,21 @@ app.post('/api/persons', (request, response) => {
         .then(savedPerson => {
             response.json(formatPerson(savedPerson))
         })
-
     /*
     if (!body.name || !body.number) {
-        response.status(400).json({ error: 'name or number missing' })
+        return response.status(400).json({ error: 'name or number missing' })
     } else {
         person
             .save()
             .then(savedPerson => {
                 response.json(formatPerson(savedPerson))
             })
-            .catch(error => {
-                console.log('sait napattua virheen' + error)
-            })
+        /* .catch(error => {
+             console.log('sait napattua virheen ' + error)
+         })
 
-    } 
-    */
-
+            }
+       */
 })
 
 app.delete('/api/persons/:id', (request, response) => {
