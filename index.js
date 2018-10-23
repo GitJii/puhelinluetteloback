@@ -92,6 +92,10 @@ app.post('/api/persons', (request, response) => {
 
     const body = request.body
 
+    if(body.name === undefined || body.number === undefined){
+        response.status(400).json({error: 'name or number missing'})
+    }
+
     const person = new Person({
         name: body.name,
         number: body.number,
@@ -100,8 +104,11 @@ app.post('/api/persons', (request, response) => {
 
     person
         .save()
-        .then(savedPerson => {
-            response.json(formatPerson(savedPerson))
+        .then(person => {
+            return formatPerson(person)
+        })
+        .then(formattedPerson => {
+            response.json(formatPerson(formattedPerson))
         })
     /*
     if (!body.name || !body.number) {
