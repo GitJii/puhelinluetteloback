@@ -1,10 +1,13 @@
 const mongoose = require('mongoose')
 
 /*Tähän tulee url */
-
+const url = 'mongodb://jaakaappi:pakastin18@ds133353.mlab.com:33353/puhelinluettelo-numerot'
 /*Tähän tulee url */
 
 mongoose.connect(url)
+
+/* Joku käytti seuraavaa muotoa function(person){return { id: _id, name };} */
+
 /*
 const Schema = mongoose.Schema
 const personSchema = new Schema({ name: String, number: String })
@@ -14,16 +17,8 @@ const Person = mongoose.model('Person', personSchema)
 personSchema.statics.formatPerson2 = function (person) {
     return this.model('Person').find({name: this.name}, person) 
 };
-/*
-const formatPerson = (person) => {
-    return {
-        name: person.name,
-        number: person.number,
-        id: person._id
-    }
-}
-
 */
+
 
 const Person = mongoose.model('Person', {
     name: String,

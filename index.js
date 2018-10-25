@@ -16,30 +16,7 @@ app.use(morgan(':method :url :data :status :res[content-length] - :response-time
 app.use(cors())
 
 app.use(express.static('build'))
-/*
-let persons = [
-    {
-        name: 'Tero Pitkämäki',
-        number: '040-2349873249',
-        id: 1
-    },
-    {
-        name: 'Matti Muukalainen',
-        number: '040-2340983411',
-        id: 2
-    },
-    {
-        name: 'Anselmi Ansalainen',
-        number: '040-3204987324987',
-        id: 3
-    },
-    {
-        name: 'Leonhard Euler',
-        number: '040-31415312',
-        id: 4
-    }
-]
-*/
+
 
 const formatPerson = (person) => {
     return {
@@ -48,6 +25,25 @@ const formatPerson = (person) => {
         id: person._id
     }
 }
+
+app.put('/api/persons/:id', (request, response) => {
+    const body = request.body
+
+    const person = {
+        name: body.name,
+        number: body.number
+    }
+    Person
+        .findByIdAndUpdate(request.params.id, person, { new: true })
+        .then(updatedPerson => {
+            console.log('päädyttiin PUTiin')
+            response.json(formatPerson(updatedPerson))
+        })
+        .catch(error => {
+            console.log(error)
+            response.status(400).send({ error: 'Virheellinen id' })
+        })
+})
 
 app.get('/api', (request, response) => {
     response.send('<h1> Tämä on etusivu! </h1>')
@@ -63,6 +59,11 @@ app.get('/api/persons/:id', (request, response) => {
             } else {
                 response.status(404).end()
             }
+
+        })
+        .catch(error => {
+            console.log(error)
+            response.status(404).send({ error: 'Vääränlainen id' })
         })
 })
 
@@ -74,6 +75,10 @@ app.get('/api/info', (request, response) => {
         .then(maara => {
             response.send('<div>puhelinluettelossa on ' + maara + ' henkilön tiedot</div>'
                 + '<div> <br> </div>' + new Date())
+        })
+        .catch(error => {
+            console.log(error)
+            response.status(400).send({ error: 'Jokin meni pieleen infossa' })
         })
 })
 
@@ -92,47 +97,53 @@ app.post('/api/persons', (request, response) => {
 
     const body = request.body
 
-    if(body.name === undefined || body.number === undefined){
-        response.status(400).json({error: 'name or number missing'})
-    }
-
     const person = new Person({
         name: body.name,
         number: body.number,
         date: new Date(),
     })
 
-    person
-        .save()
-        .then(person => {
-            return formatPerson(person)
-        })
-        .then(formattedPerson => {
-            response.json(formatPerson(formattedPerson))
-        })
-    /*
     if (!body.name || !body.number) {
+        console.log('vaihtoehto numero 1')
         return response.status(400).json({ error: 'name or number missing' })
-    } else {
+    }
+
+
+    else if (Person.find({ name: body.name })) {
+        console.log('vaihtoehto numero 2')
+/* Henkilön lisääminen johtaa tänne jos nimi löytyy, ei johdu etunimestä */
+        Person
+            .find({ name: body.name })
+            .then(result => {
+                console.log('löydettiin henkilö: ')
+                response.status(400).send({ error: 'Henkilö on jo luettelossa' })
+            })
+    }
+
+
+    else {
+        console.log('vaihtoehtonumero 3')
         person
             .save()
             .then(savedPerson => {
                 response.json(formatPerson(savedPerson))
             })
-        /* .catch(error => {
-             console.log('sait napattua virheen ' + error)
-         })
-
-            }
-       */
+            .catch(error => {
+                console.log('sait napattua virheen ' + error)
+                response.status(400).send({ error: 'name or number missing' })
+            })
+    }
 })
 
 app.delete('/api/persons/:id', (request, response) => {
 
     Person
-        .findByIdAndDelete(request.params.id)
-        .then(() => {
+        .findByIdAndRemove(request.params.id)
+        .then(result => {
             response.status(204).end()
+        })
+        .catch(error => {
+            response.status(400).send({ error: 'Virheellinen id' })
         })
 })
 
