@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 
 /*Tähän tulee url */
 
-
 /*Tähän tulee url */
 
 mongoose.connect(url)

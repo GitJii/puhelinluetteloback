@@ -108,18 +108,17 @@ app.post('/api/persons', (request, response) => {
         return response.status(400).json({ error: 'name or number missing' })
     }
 
-
-    else if (Person.find({ name: body.name })) {
+    else if (Person.find({name: body.name})) {
+        console.log('tulostus: ' , Person.find({name: body.name}))
         console.log('vaihtoehto numero 2')
 /* Henkilön lisääminen johtaa tänne jos nimi löytyy, ei johdu etunimestä */
         Person
             .find({ name: body.name })
             .then(result => {
-                console.log('löydettiin henkilö: ')
+                console.log('löydettiin henkilöt: ')
                 response.status(400).send({ error: 'Henkilö on jo luettelossa' })
             })
     }
-
 
     else {
         console.log('vaihtoehtonumero 3')
