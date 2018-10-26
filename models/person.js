@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 /*Tähän tulee url */
-
+const url = 'mongodb://kahvinkeitin:espresso91@ds133353.mlab.com:33353/puhelinluettelo-numerot'
 /*Tähän tulee url */
 
 mongoose.connect(url)

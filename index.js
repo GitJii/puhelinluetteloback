@@ -109,7 +109,7 @@ app.post('/api/persons', (request, response) => {
     }
 
     else if (Person.find({name: body.name})) {
-        console.log('tulostus: ' , Person.find({name: body.name}))
+        console.log('tulostus: ' , Person.find({name: body.name}), 'loppu')
         console.log('vaihtoehto numero 2')
 /* Henkilön lisääminen johtaa tänne jos nimi löytyy, ei johdu etunimestä */
         Person
