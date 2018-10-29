@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 
 /*Tähän tulee url */
-
+const url = process.env.MONGODB_URI
 /*Tähän tulee url */
 
 /*
