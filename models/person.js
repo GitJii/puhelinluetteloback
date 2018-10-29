@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 
 /*Tähän tulee url */
-const url = 'mongodb://korttipakka:jokeri18@ds133353.mlab.com:33353/puhelinluettelo-numerot'
+const url = ''
 /*Tähän tulee url */
 
 /*
