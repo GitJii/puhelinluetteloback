@@ -2,8 +2,12 @@ const mongoose = require('mongoose')
 
 
 /*Tähän tulee url */
-const url = process.env.MONGODB_URI
+const url = 'mongodb://korttipakka:jokeri18@ds133353.mlab.com:33353/puhelinluettelo-numerot'
 /*Tähän tulee url */
+
+/*
+const url = process.env.MONGODB_URI
+ */
 
 mongoose.connect(url)
 

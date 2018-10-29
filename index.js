@@ -36,7 +36,6 @@ app.put('/api/persons/:id', (request, response) => {
     Person
         .findByIdAndUpdate(request.params.id, person, { new: true })
         .then(updatedPerson => {
-            console.log('päädyttiin PUTiin')
             response.json(formatPerson(updatedPerson))
         })
         .catch(error => {
@@ -108,28 +107,33 @@ app.post('/api/persons', (request, response) => {
         return response.status(400).json({ error: 'name or number missing' })
     }
 
-    else if (Person.find({name: body.name})) {
-        console.log('tulostus: ' , Person.find({name: body.name}), 'loppu')
-        console.log('vaihtoehto numero 2')
-/* Henkilön lisääminen johtaa tänne jos nimi löytyy, ei johdu etunimestä */
+    else {
+
         Person
             .find({ name: body.name })
             .then(result => {
-                console.log('löydettiin henkilöt: ')
-                response.status(400).send({ error: 'Henkilö on jo luettelossa' })
-            })
-    }
+                console.log('------------------------------------')
 
-    else {
-        console.log('vaihtoehtonumero 3')
-        person
-            .save()
-            .then(savedPerson => {
-                response.json(formatPerson(savedPerson))
+                if (result[0] === undefined) {
+
+                    person
+                    .save()
+                    .then(savedPerson => {
+                        response.json(formatPerson(savedPerson))
+                    })
+                    .catch(error => {
+                        console.log('sait napattua virheen ' + error)
+                        response.status(400).send({ error: 'name or number missing' })
+                    })
+
+                } else {
+                    response.status(400).send({ error: 'Henkilö on jo luettelossa' })
+                }
+
             })
             .catch(error => {
-                console.log('sait napattua virheen ' + error)
-                response.status(400).send({ error: 'name or number missing' })
+                console.log('tapahtui virhe: ', error)
+                response.status(400).send({ error: 'jotain meni pieleen' })
             })
     }
 })
