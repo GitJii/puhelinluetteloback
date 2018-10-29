@@ -1,15 +1,13 @@
 const mongoose = require('mongoose')
 
 
-/*Tähän tulee url */
-const url = process.env.MONGODB_URI
-/*Tähän tulee url */
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config()
+}
 
-/*
 const url = process.env.MONGODB_URI
- */
 
-mongoose.connect(url)
+mongoose.connect(url) 
 
 /* Joku käytti seuraavaa muotoa function(person){return { id: _id, name };} */
 

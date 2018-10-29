@@ -17,7 +17,6 @@ app.use(cors())
 
 app.use(express.static('build'))
 
-
 const formatPerson = (person) => {
     return {
         name: person.name,
