@@ -17,13 +17,6 @@ app.use(cors())
 
 app.use(express.static('build'))
 
-const formatPerson = (person) => {
-    return {
-        name: person.name,
-        number: person.number,
-        id: person._id
-    }
-}
 
 app.put('/api/persons/:id', (request, response) => {
     const body = request.body
@@ -35,7 +28,7 @@ app.put('/api/persons/:id', (request, response) => {
     Person
         .findByIdAndUpdate(request.params.id, person, { new: true })
         .then(updatedPerson => {
-            response.json(formatPerson(updatedPerson))
+            response.json(Person.format(updatedPerson))
         })
         .catch(error => {
             console.log(error)
@@ -53,7 +46,7 @@ app.get('/api/persons/:id', (request, response) => {
         .findById(request.params.id)
         .then(person => {
             if (person) {
-                response.json(formatPerson(person))
+                response.json(Person.format(person))
             } else {
                 response.status(404).end()
             }
@@ -81,14 +74,22 @@ app.get('/api/info', (request, response) => {
 })
 
 app.get('/api/persons', (request, response) => {
+/*
+    const persons2 = [
+        {
+            name: 'tero',
+            number: '203948'
+            
+        }
+    ]
 
+    console.log('yksittäinen: ', Person.format(persons2[0]))
+*/
     Person
         .find({})
         .then(persons => {
-            response.json(persons.map(formatPerson))
+            response.json(persons.map(Person.format))
         })
-
-    /*response.json(persons)*/
 })
 
 app.post('/api/persons', (request, response) => {
@@ -116,14 +117,14 @@ app.post('/api/persons', (request, response) => {
                 if (result[0] === undefined) {
 
                     person
-                    .save()
-                    .then(savedPerson => {
-                        response.json(formatPerson(savedPerson))
-                    })
-                    .catch(error => {
-                        console.log('sait napattua virheen ' + error)
-                        response.status(400).send({ error: 'name or number missing' })
-                    })
+                        .save()
+                        .then(savedPerson => {
+                            response.json(Person.format(savedPerson))
+                        })
+                        .catch(error => {
+                            console.log('sait napattua virheen ' + error)
+                            response.status(400).send({ error: 'name or number missing' })
+                        })
 
                 } else {
                     response.status(400).send({ error: 'Henkilö on jo luettelossa' })

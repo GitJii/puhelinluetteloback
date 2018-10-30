@@ -7,25 +7,19 @@ if (process.env.NODE_ENV !== 'production') {
 
 const url = process.env.MONGODB_URI
 
-mongoose.connect(url) 
+mongoose.connect(url)
 
-/* Joku käytti seuraavaa muotoa function(person){return { id: _id, name };} */
-
-/*
 const Schema = mongoose.Schema
 const personSchema = new Schema({ name: String, number: String })
 
+personSchema.statics.format = (person) => {
+    return {
+        name: person.name,
+        number: person.number,
+        id: person._id
+    }
+}
+
 const Person = mongoose.model('Person', personSchema)
-
-personSchema.statics.formatPerson2 = function (person) {
-    return this.model('Person').find({name: this.name}, person) 
-};
-*/
-
-
-const Person = mongoose.model('Person', {
-    name: String,
-    number: String,
-})
 
 module.exports = Person
