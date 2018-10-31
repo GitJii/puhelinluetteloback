@@ -5,7 +5,8 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
 
-morgan.token('data', (request, response) => {
+
+morgan.token('data', request => {
     return JSON.stringify(request.body)
 })
 
@@ -74,17 +75,6 @@ app.get('/api/info', (request, response) => {
 })
 
 app.get('/api/persons', (request, response) => {
-/*
-    const persons2 = [
-        {
-            name: 'tero',
-            number: '203948'
-            
-        }
-    ]
-
-    console.log('yksittäinen: ', Person.format(persons2[0]))
-*/
     Person
         .find({})
         .then(persons => {
@@ -142,10 +132,10 @@ app.delete('/api/persons/:id', (request, response) => {
 
     Person
         .findByIdAndRemove(request.params.id)
-        .then(result => {
+        .then(() => {
             response.status(204).end()
         })
-        .catch(error => {
+        .catch(() => {
             response.status(400).send({ error: 'Virheellinen id' })
         })
 })
